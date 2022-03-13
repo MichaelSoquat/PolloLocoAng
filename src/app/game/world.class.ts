@@ -1,7 +1,9 @@
 import { Character } from "./character.class";
+import { Endboss } from "./endboss.class";
 
 export class World {
-    character = new Character;
+    endboss = new Endboss();
+    character = new Character();
     image = new Image();
     ctx;
     canvas;
@@ -13,11 +15,16 @@ export class World {
     }
 
     draw() {
-        this.character.draw(this.ctx);
+        this.addToMap(this.endboss)
+        this.addToMap(this.character);
         requestAnimationFrame(() => {
             this.draw();
         })
 
 
+    }
+
+    addToMap(mo) {
+        mo.draw(this.ctx)
     }
 }

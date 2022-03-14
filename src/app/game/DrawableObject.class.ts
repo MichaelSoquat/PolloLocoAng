@@ -14,4 +14,12 @@ export class DrawableObject {
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
+
+    loadImages(array) {
+        this.img = new Image();
+        array.forEach(path => {
+            path = this.img.src;
+        });
+
+    }
 }

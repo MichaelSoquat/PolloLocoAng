@@ -1,5 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Keyboard } from './keyboard.class';
 import { World } from './world.class';
+
 
 @Component({
   selector: 'app-game',
@@ -9,13 +11,53 @@ import { World } from './world.class';
 })
 export class GameComponent implements OnInit {
 
+  // create Keyboard
+  keyboard = new Keyboard;
+
+  //Keybaord event keydown
+
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
-    if (event.key == 'ArrowDown') {
-      console.log(event.key)
-    }
 
+    if (event.key == 'ArrowLeft') {
+      this.keyboard.LEFT = true;
+    }
+    if (event.key == 'ArrowRight') {
+      this.keyboard.RIGHT = true;
+    }
+    if (event.key == 'ArrowUp') {
+      this.keyboard.JUMP = true;
+      console.log(this.keyboard.JUMP)
+    }
+    if (event.keyCode == 32) {
+      this.keyboard.THROW = true;
+    }
   }
+
+  //Keyboard event keyup
+
+  @HostListener('window:keyup', ['$event'])
+  handleKeyUp(event: KeyboardEvent) {
+
+    if (event.key == 'ArrowLeft') {
+      this.keyboard.LEFT = false;
+    }
+    if (event.key == 'ArrowRight') {
+      this.keyboard.RIGHT = false;
+    }
+    if (event.key == 'ArrowUp') {
+      this.keyboard.JUMP = false;
+      console.log(this.keyboard.JUMP)
+    }
+    if (event.keyCode == 32) {
+      console.log('jump')
+      this.keyboard.THROW = false;
+    }
+  }
+  
+  //get canvas
+
+
   @ViewChild('canvas', { static: true })
 
 
@@ -26,7 +68,8 @@ export class GameComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    new World(this.ctx, this.canvas);
+    new World(this.ctx, this.canvas, this.keyboard);
+
 
   }
 

@@ -3,8 +3,8 @@ import { MovableObject } from "./MovableObject.class";
 
 
 export class Cloud extends MovableObject {
-    width = 250;
-    height = 150;
+    width = 300;
+    height = 200;
     y = 20;
     x;
     constructor(path, x) {
@@ -15,7 +15,7 @@ export class Cloud extends MovableObject {
     }
     moveLeft() {
         setInterval(() => {
-            this.x -= 0.05;
+            this.x -= 0.1;
         }, 1000 / 60)
 
     }

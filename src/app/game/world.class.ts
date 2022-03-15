@@ -1,44 +1,10 @@
-import { Background } from "./background.class";
 import { Character } from "./character.class";
-import { Cloud } from "./cloud.class";
 import { Endboss } from "./endboss.class";
+import { Level } from "./level.class";
 
 export class World {
-    background = [new Background('./assets/img/5.Fondo/Capas/5.cielo_1920-1080px.png', -719),
-    new Background('./assets/img/5.Fondo/Capas/3.Fondo3/2.png', - 719),
-    new Background('./assets/img/5.Fondo/Capas/2.Fondo2/2.png', -719),
-    new Background('./assets/img/5.Fondo/Capas/1.suelo-fondo1/2.png', -719),
-    new Background('./assets/img/5.Fondo/Capas/5.cielo_1920-1080px.png', 0),
-    new Background('./assets/img/5.Fondo/Capas/3.Fondo3/1.png', 0),
-    new Background('./assets/img/5.Fondo/Capas/2.Fondo2/1.png', 0),
-    new Background('./assets/img/5.Fondo/Capas/1.suelo-fondo1/1.png', 0),
-    new Background('./assets/img/5.Fondo/Capas/5.cielo_1920-1080px.png', 719),
-    new Background('./assets/img/5.Fondo/Capas/3.Fondo3/2.png', 719),
-    new Background('./assets/img/5.Fondo/Capas/2.Fondo2/2.png', 719),
-    new Background('./assets/img/5.Fondo/Capas/1.suelo-fondo1/2.png', 719),
-    new Background('./assets/img/5.Fondo/Capas/5.cielo_1920-1080px.png', 1438),
-    new Background('./assets/img/5.Fondo/Capas/3.Fondo3/1.png', 1438),
-    new Background('./assets/img/5.Fondo/Capas/2.Fondo2/1.png', 1438),
-    new Background('./assets/img/5.Fondo/Capas/1.suelo-fondo1/1.png', 1438),
-    new Background('./assets/img/5.Fondo/Capas/5.cielo_1920-1080px.png', 719 * 3),
-    new Background('./assets/img/5.Fondo/Capas/3.Fondo3/2.png', 719 * 3),
-    new Background('./assets/img/5.Fondo/Capas/2.Fondo2/2.png', 719 * 3),
-    new Background('./assets/img/5.Fondo/Capas/1.suelo-fondo1/2.png', 719 * 3),
-    new Background('./assets/img/5.Fondo/Capas/5.cielo_1920-1080px.png', 719 * 4),
-    new Background('./assets/img/5.Fondo/Capas/3.Fondo3/1.png', 719 * 4),
-    new Background('./assets/img/5.Fondo/Capas/2.Fondo2/1.png', 719 * 4),
-    new Background('./assets/img/5.Fondo/Capas/1.suelo-fondo1/1.png', 719 * 4)];
 
-    cloud = [new Cloud('./assets/img/5.Fondo/Capas/4.nubes/1.png', 0),
-    new Cloud('./assets/img/5.Fondo/Capas/4.nubes/2.png', 720),
-    new Cloud('./assets/img/5.Fondo/Capas/4.nubes/1.png', 720 * 2),
-    new Cloud('./assets/img/5.Fondo/Capas/4.nubes/2.png', 720 * 3),
-    new Cloud('./assets/img/5.Fondo/Capas/4.nubes/1.png', 720 * 4),
-    new Cloud('./assets/img/5.Fondo/Capas/4.nubes/2.png', 720 * 5),
-    new Cloud('./assets/img/5.Fondo/Capas/4.nubes/1.png', 720 * 6)
-    ];
-
-
+    level = new Level();
     endboss = new Endboss();
     character = new Character();
     image = new Image();
@@ -52,24 +18,38 @@ export class World {
         this.ctx = this.canvas.nativeElement.getContext('2d');
         this.draw();
         this.setWorld();
+        this.checkCollision();
     }
+    checkCollision() {
+        setInterval(() => {
+            this.level.chicken.forEach((enemy) => {
+                if (this.character.isColliding(enemy)) {
+                    this.character.energy -= 10;
+                };
+            })
 
+            console.log(this.character.energy)
+        })
+
+    }
     setWorld() {
         this.character.world = this;
     }
     draw() {
         this.ctx.clearRect(0, 0, 720, 480); //clear canvas
-        this.ctx.translate(-this.character.x, 0)
+        this.ctx.translate(-this.character.x + 100, 0) //camera
 
         //add arrays to map
-        this.addObjectToMap(this.background);
-        this.addObjectToMap(this.cloud);
+
+        this.addObjectToMap(this.level.background);
+        this.addObjectToMap(this.level.chicken);
+        this.addObjectToMap(this.level.cloud);
         //add to Map
 
         this.addToMap(this.character);
         this.addToMap(this.endboss);
 
-        this.ctx.translate(this.character.x, 0)
+        this.ctx.translate(this.character.x - 100, 0) //camera back
 
 
         //redrawing fps

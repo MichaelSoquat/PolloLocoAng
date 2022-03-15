@@ -24,11 +24,14 @@ export class World {
         setInterval(() => {
             this.level.chicken.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.energy -= 10;
+                    this.character.hit();
+                    if (this.character.isStamping(enemy)) {
+                        console.log('working')
+                    }
                 };
             })
 
-            console.log(this.character.energy)
+            // console.log(this.character.energy)
         })
 
     }

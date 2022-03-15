@@ -4,6 +4,7 @@ export class DrawableObject {
     y = 0;
     width = 100;
     height = 200;
+    imageCache = {};
 
     img;
     loadImage(path) {
@@ -15,10 +16,12 @@ export class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    loadImages(array) {
-        this.img = new Image();
-        array.forEach(path => {
-            path = this.img.src;
+    loadImages(arr) {
+        arr.forEach((path) => {
+            let img = new Image();
+            img.src = path;
+            this.imageCache[path] = img;
+            console.log(this.imageCache)
         });
 
     }

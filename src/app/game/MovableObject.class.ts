@@ -5,6 +5,8 @@ export class MovableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     energy = 100;
+    lastHit = 0;
+    currentImage = 0;
 
     moveRight(speed) {
         this.x += speed;
@@ -25,10 +27,32 @@ export class MovableObject extends DrawableObject {
 
     }
 
+    isStamping(mo) {
+        return this.x + this.width > mo.x &&
+            this.x < mo.x &&
+            this.y + this.height >= mo.y
+            // && this.isFalling;
+
+    }
     isColliding(mo) {
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
             this.x < mo.x &&
             this.y < mo.y + mo.height;
+    }
+
+    hit() {
+
+    }
+
+    playAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+
+    }
+    isAboveGround() {
+        return this.y < 220;
     }
 }

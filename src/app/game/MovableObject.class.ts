@@ -6,7 +6,10 @@ export class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    newHit = 0;
     currentImage = 0;
+    isHurt = false;
+    isDead = false;
 
     moveRight(speed) {
         this.x += speed;
@@ -42,10 +45,26 @@ export class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 1;
+        this.newHit = new Date().getTime();
+        if ((this.newHit - this.lastHit) > 1000) {
+            this.energy -= 20;
+            this.isDamaged();
+        }
+
         if (this.energy <= 0) {
             this.energy = 0;
+            this.isDead = true;
+        } else {
+            this.lastHit = new Date().getTime();
+            console.log(this.lastHit)
         }
+    }
+
+    isDamaged() {
+        this.isHurt = true;
+        setTimeout(() => {
+            this.isHurt = false;
+        }, 1000)
     }
 
     playAnimation(images) {

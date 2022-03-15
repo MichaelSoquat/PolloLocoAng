@@ -97,6 +97,12 @@ export class Character extends MovableObject {
                 console.log(this.currentImage)
 
             }
+            // else if (this.hit()) {
+            //     this.playAnimation(this.IMAGES_HURT)
+            // }
+            // else if (this.isDead()) {
+            //     this.playAnimation(this.IMAGES_DEAD)
+            // }
             else if (this.world.keyboard.LEFT || this.world.keyboard.RIGHT) {
                 this.playAnimation(this.IMAGES_WALKING)
             } else {
@@ -107,7 +113,9 @@ export class Character extends MovableObject {
 
     }
     jump() {
+
         if (this.y >= 220) {
+            this.currentImage = 0;
             this.speedY = 30;
         }
     }

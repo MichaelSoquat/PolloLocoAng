@@ -31,7 +31,7 @@ export class MovableObject extends DrawableObject {
         return this.x + this.width > mo.x &&
             this.x < mo.x &&
             this.y + this.height >= mo.y
-            // && this.isFalling;
+        // && this.isFalling;
 
     }
     isColliding(mo) {
@@ -42,7 +42,10 @@ export class MovableObject extends DrawableObject {
     }
 
     hit() {
-
+        this.energy -= 1;
+        if (this.energy <= 0) {
+            this.energy = 0;
+        }
     }
 
     playAnimation(images) {
@@ -50,7 +53,6 @@ export class MovableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-
     }
     isAboveGround() {
         return this.y < 220;

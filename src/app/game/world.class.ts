@@ -1,15 +1,21 @@
+import { BOTTLESBAR } from "./bottlesBar.class";
 import { Character } from "./character.class";
+import { COINBAR } from "./coinBar.class";
 import { Endboss } from "./endboss.class";
 import { Level } from "./level.class";
+import { LIFEBAR } from "./lifeBar.class";
 
 export class World {
-
+    ctx;
     level = new Level();
+    lifebar = new LIFEBAR();
+    coinbar = new COINBAR();
+    bottlesbar = new BOTTLESBAR();
     endboss = new Endboss();
     character = new Character();
     image = new Image();
     keyboard;
-    ctx;
+
     canvas;
     constructor(ctx, canvas, keyboard) {
         this.ctx = ctx;
@@ -19,17 +25,43 @@ export class World {
         this.draw();
         this.setWorld();
         this.checkCollision();
+        this.checkCollect();
+
+
+    }
+    checkCollect() {
+        setInterval(() => {
+            this.level.coins.forEach((coin) => {
+                if (this.character.isColliding(coin)) {
+                    this.level.coins.splice(this.level.coins.indexOf(coin), 1);
+                    this.coinbar.percentage += 10;
+                    this.coinbar.checkCurrentImage();
+                }
+
+            });
+            this.level.bottles.forEach((bottle) => {
+                if (this.character.isColliding(bottle)) {
+                    this.level.bottles.splice(this.level.bottles.indexOf(bottle), 1)
+                    this.bottlesbar.percentage += 10;
+                    this.bottlesbar.checkCurrentImage();
+                }
+
+            })
+
+        }, 1000 / 60)
     }
     checkCollision() {
         setInterval(() => {
             this.level.chicken.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
+                    this.lifebar.percentage = this.character.energy;
+                    this.lifebar.checkCurrentImage();
                     if (this.character.isStamping(enemy)) {
                         console.log('working')
                     }
                 };
-            })
+            }, 1000 / 60)
 
             // console.log(this.character.energy)
         })
@@ -37,7 +69,11 @@ export class World {
     }
     setWorld() {
         this.character.world = this;
+        this.coinbar.world = this;
+        this.bottlesbar.world = this;
+        this.lifebar.world = this;
     }
+
     draw() {
         this.ctx.clearRect(0, 0, 720, 480); //clear canvas
         this.ctx.translate(-this.character.x + 100, 0) //camera
@@ -47,8 +83,17 @@ export class World {
         this.addObjectToMap(this.level.background);
         this.addObjectToMap(this.level.chicken);
         this.addObjectToMap(this.level.cloud);
+        this.addObjectToMap(this.level.coins);
+        this.addObjectToMap(this.level.bottles)
         //add to Map
+        this.ctx.translate(this.character.x - 100, 0)
+        //space for fixed content like status bars
+        this.addToMap(this.lifebar);
+        this.addToMap(this.coinbar);
+        this.addToMap(this.bottlesbar);
 
+        //end of space for fixed content
+        this.ctx.translate(-this.character.x + 100, 0)
         this.addToMap(this.character);
         this.addToMap(this.endboss);
 

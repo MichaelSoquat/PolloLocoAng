@@ -56,6 +56,7 @@ export class Character extends MovableObject {
     x = 0;
     y = 220;
     speed = 7;
+
     constructor() {
         super();
         this.loadImage('./assets/img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-1.png');
@@ -68,6 +69,7 @@ export class Character extends MovableObject {
         this.moveCharacter();
         this.applyGravity();
         this.animate();
+        this.checkFalling();
     }
 
     moveCharacter() {
@@ -117,7 +119,23 @@ export class Character extends MovableObject {
         if (this.y >= 220) {
             this.currentImage = 0;
             this.speedY = 30;
+
         }
+
     }
 
+    checkFalling() {
+
+        setInterval(() => {
+            console.log(this.speedY);
+            console.log(this.isFalling)
+            if (this.isAboveGround() && this.speedY < 10) {
+                this.isFalling = true;
+            }
+            else {
+                this.isFalling = false;
+            }
+        }, 1000 / 60)
+
+    }
 }

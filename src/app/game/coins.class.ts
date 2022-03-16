@@ -2,7 +2,7 @@
 import { MovableObject } from "./MovableObject.class";
 
 export class Coins extends MovableObject {
-    world;
+    
     y = 40;
     height = 120;
     width = 120;

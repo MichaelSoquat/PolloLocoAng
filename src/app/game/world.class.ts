@@ -58,12 +58,15 @@ export class World {
                     this.lifebar.percentage = this.character.energy;
                     this.lifebar.checkCurrentImage();
                     if (this.character.isStamping(enemy)) {
-                        console.log('working')
+                        console.log(enemy.energy)
+                        enemy.energy = 0;
+                        enemy.isDead = true;
+                        
                     }
                 };
             }, 1000 / 60)
 
-            // console.log(this.character.energy)
+
         })
 
     }

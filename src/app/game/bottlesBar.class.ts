@@ -40,7 +40,7 @@ export class BOTTLESBAR extends DrawableObject {
         else if (this.percentage >= 20) {
             this.index = 1;
         }
-        console.log(this.percentage)
+        
         this.currentImage = this.IMAGES[this.index];
         this.loadImage(this.currentImage)
     }

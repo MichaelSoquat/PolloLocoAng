@@ -27,7 +27,7 @@ export class GameComponent implements OnInit {
     }
     if (event.key == 'ArrowUp') {
       this.keyboard.JUMP = true;
-      console.log(this.keyboard.JUMP)
+      
     }
     if (event.keyCode == 32) {
       this.keyboard.THROW = true;
@@ -47,10 +47,10 @@ export class GameComponent implements OnInit {
     }
     if (event.key == 'ArrowUp') {
       this.keyboard.JUMP = false;
-      console.log(this.keyboard.JUMP)
+      
     }
     if (event.keyCode == 32) {
-      console.log('jump')
+      
       this.keyboard.THROW = false;
     }
   }

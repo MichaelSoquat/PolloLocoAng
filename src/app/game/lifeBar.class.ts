@@ -45,7 +45,7 @@ export class LIFEBAR extends DrawableObject {
 
 
 
-        console.log(this.percentage)
+        
         this.currentImage = this.IMAGES[this.index];
         this.loadImage(this.currentImage)
     }

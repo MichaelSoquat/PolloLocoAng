@@ -10,6 +10,7 @@ export class MovableObject extends DrawableObject {
     currentImage = 0;
     isHurt = false;
     isDead = false;
+    isFalling = false;
 
     moveRight(speed) {
         this.x += speed;
@@ -34,7 +35,7 @@ export class MovableObject extends DrawableObject {
         return this.x + this.width > mo.x &&
             this.x < mo.x &&
             this.y + this.height >= mo.y
-        // && this.isFalling;
+            && this.isFalling
 
     }
     isColliding(mo) {
@@ -56,7 +57,6 @@ export class MovableObject extends DrawableObject {
             this.isDead = true;
         } else {
             this.lastHit = new Date().getTime();
-            console.log(this.lastHit)
         }
     }
 
@@ -75,5 +75,13 @@ export class MovableObject extends DrawableObject {
     }
     isAboveGround() {
         return this.y < 220;
+    }
+
+    isOnGround() {
+        if (this.y == 220) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

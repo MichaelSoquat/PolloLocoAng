@@ -4,6 +4,8 @@ import { COINBAR } from "./coinBar.class";
 import { Endboss } from "./endboss.class";
 import { Level } from "./level.class";
 import { LIFEBAR } from "./lifeBar.class";
+import { ThrowableObject } from "./throwableObject.class";
+
 
 export class World {
     ctx;
@@ -15,6 +17,7 @@ export class World {
     character = new Character();
     image = new Image();
     keyboard;
+    throwableObject = [];
 
     canvas;
     constructor(ctx, canvas, keyboard) {
@@ -26,7 +29,19 @@ export class World {
         this.setWorld();
         this.checkCollision();
         this.checkCollect();
+        this.checkThrow();
 
+
+    }
+
+    checkThrow() {
+        setInterval(() => {
+            if (this.keyboard.THROW) {
+
+                let bottle = new ThrowableObject(this.character.x + 40, this.character.y + 100)
+                this.throwableObject.push(bottle);
+            }
+        },1000/60)
 
     }
     checkCollect() {
@@ -53,16 +68,20 @@ export class World {
     checkCollision() {
         setInterval(() => {
             this.level.chicken.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
+                if (this.character.isStamping(enemy)) {
+                    enemy.energy = 0;
+                    enemy.isDead = true;
+
+                    setTimeout(() => {
+                        enemy.y = 600;   //hide enemy
+                    }, 1000)
+
+                }
+                else if (this.character.isColliding(enemy) && !enemy.isDead) {
                     this.character.hit();
                     this.lifebar.percentage = this.character.energy;
                     this.lifebar.checkCurrentImage();
-                    if (this.character.isStamping(enemy)) {
-                        console.log(enemy.energy)
-                        enemy.energy = 0;
-                        enemy.isDead = true;
-                        
-                    }
+
                 };
             }, 1000 / 60)
 
@@ -70,6 +89,7 @@ export class World {
         })
 
     }
+
     setWorld() {
         this.character.world = this;
         this.coinbar.world = this;
@@ -87,7 +107,12 @@ export class World {
         this.addObjectToMap(this.level.chicken);
         this.addObjectToMap(this.level.cloud);
         this.addObjectToMap(this.level.coins);
-        this.addObjectToMap(this.level.bottles)
+        this.addObjectToMap(this.level.bottles);
+        this.addObjectToMap(this.throwableObject);
+
+
+
+
         //add to Map
         this.ctx.translate(this.character.x - 100, 0)
         //space for fixed content like status bars
@@ -99,6 +124,8 @@ export class World {
         this.ctx.translate(-this.character.x + 100, 0)
         this.addToMap(this.character);
         this.addToMap(this.endboss);
+
+
 
         this.ctx.translate(this.character.x - 100, 0) //camera back
 

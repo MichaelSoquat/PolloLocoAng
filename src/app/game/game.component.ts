@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
       this.keyboard.JUMP = true;
       
     }
+    
     if (event.keyCode == 32) {
       this.keyboard.THROW = true;
     }

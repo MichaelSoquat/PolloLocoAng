@@ -96,7 +96,7 @@ export class Character extends MovableObject {
         setInterval(() => {
             if (this.isAboveGround() && !this.isDead) {
                 this.playAnimation(this.IMAGES_JUMPING);
-                console.log(this.currentImage)
+                
 
             }
             else if (this.isHurt && !this.isDead) {
@@ -127,8 +127,7 @@ export class Character extends MovableObject {
     checkFalling() {
 
         setInterval(() => {
-            console.log(this.speedY);
-            console.log(this.isFalling)
+            
             if (this.isAboveGround() && this.speedY < 10) {
                 this.isFalling = true;
             }

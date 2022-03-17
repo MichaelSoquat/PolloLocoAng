@@ -3,6 +3,7 @@ import { DrawableObject } from "./DrawableObject.class";
 export class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
+    speedX = 10;
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
@@ -22,7 +23,7 @@ export class MovableObject extends DrawableObject {
 
     applyGravity() {
         setInterval(() => {
-            if (this.y <= 220 || this.speedY > 0) {
+            if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }

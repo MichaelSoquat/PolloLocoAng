@@ -5,6 +5,7 @@ export class BOTTLESBAR extends DrawableObject {
     percentage = 0;
     currentImage;
     index = 0;
+
     IMAGES = [
         './assets/img/7.Marcadores/Barra/Marcador_botella/Azul/0.png',
         './assets/img/7.Marcadores/Barra/Marcador_botella/Azul/20.png',
@@ -40,7 +41,7 @@ export class BOTTLESBAR extends DrawableObject {
         else if (this.percentage >= 20) {
             this.index = 1;
         }
-        
+
         this.currentImage = this.IMAGES[this.index];
         this.loadImage(this.currentImage)
     }

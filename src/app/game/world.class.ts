@@ -18,8 +18,11 @@ export class World {
     image = new Image();
     keyboard;
     throwableObject = [];
-
     canvas;
+    lastThrow = 1;
+    timegone = 0;
+    currentBottle;
+
     constructor(ctx, canvas, keyboard) {
         this.ctx = ctx;
         this.canvas = canvas;
@@ -30,20 +33,25 @@ export class World {
         this.checkCollision();
         this.checkCollect();
         this.checkThrow();
-
-
     }
 
     checkThrow() {
         setInterval(() => {
-            if (this.keyboard.THROW) {
-
+            let newThrow = new Date().getTime();
+            this.timegone = newThrow - this.lastThrow;
+            if (this.keyboard.THROW && this.timegone >= 1000) {
+                this.lastThrow = new Date().getTime();
                 let bottle = new ThrowableObject(this.character.x + 40, this.character.y + 100)
+                this.currentBottle = bottle;
+                console.log(this.currentBottle)
+
                 this.throwableObject.push(bottle);
             }
-        },1000/60)
-
+        }, 1000 / 60)
     }
+
+    // collect items
+
     checkCollect() {
         setInterval(() => {
             this.level.coins.forEach((coin) => {
@@ -65,10 +73,13 @@ export class World {
 
         }, 1000 / 60)
     }
+
+    // check collision
+
     checkCollision() {
         setInterval(() => {
             this.level.chicken.forEach((enemy) => {
-                if (this.character.isStamping(enemy)) {
+                if (this.character.isStamping(enemy) || (this.currentBottle && this.currentBottle.isColliding(enemy))) {
                     enemy.energy = 0;
                     enemy.isDead = true;
 
@@ -100,36 +111,24 @@ export class World {
     draw() {
         this.ctx.clearRect(0, 0, 720, 480); //clear canvas
         this.ctx.translate(-this.character.x + 100, 0) //camera
-
         //add arrays to map
-
         this.addObjectToMap(this.level.background);
         this.addObjectToMap(this.level.chicken);
         this.addObjectToMap(this.level.cloud);
         this.addObjectToMap(this.level.coins);
         this.addObjectToMap(this.level.bottles);
         this.addObjectToMap(this.throwableObject);
-
-
-
-
         //add to Map
         this.ctx.translate(this.character.x - 100, 0)
         //space for fixed content like status bars
         this.addToMap(this.lifebar);
         this.addToMap(this.coinbar);
         this.addToMap(this.bottlesbar);
-
         //end of space for fixed content
         this.ctx.translate(-this.character.x + 100, 0)
         this.addToMap(this.character);
         this.addToMap(this.endboss);
-
-
-
         this.ctx.translate(this.character.x - 100, 0) //camera back
-
-
         //redrawing fps
         requestAnimationFrame(() => {
             this.draw();
